@@ -1,7 +1,4 @@
-use std::cell::RefCell;
-
-use magnus::value::ReprValue;
-use magnus::{function, method, Error, IntoValue, Module, Object, RArray, RModule, Ruby, Value};
+use magnus::{function, method, Error, Module, Object, RArray, RModule, Ruby, Value};
 use send_wrapper::SendWrapper;
 
 use i_slint_core::model::{Model, ModelRc, VecModel};
@@ -39,8 +36,7 @@ impl ListModel {
         let ruby = unsafe { Ruby::get_unchecked() };
         match self.inner.row_data(row) {
             Some(val) => Ok(value::slint_to_ruby(&ruby, &val)),
-            None => Err(Error::new(
-                magnus::exception::range_error(),
+            None => Err(errors::to_range_error(
                 format!("Row index {} out of range (count: {})", row, self.inner.row_count()),
             )),
         }
@@ -60,8 +56,7 @@ impl ListModel {
 
     fn remove(&self, index: usize) -> Result<(), Error> {
         if index >= self.inner.row_count() {
-            return Err(Error::new(
-                magnus::exception::range_error(),
+            return Err(errors::to_range_error(
                 format!("Row index {} out of range (count: {})", index, self.inner.row_count()),
             ));
         }

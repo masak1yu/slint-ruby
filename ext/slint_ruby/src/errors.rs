@@ -1,11 +1,18 @@
-use magnus::Error;
+use magnus::{Error, Ruby};
 
 pub fn to_runtime_error(e: impl std::fmt::Display) -> Error {
-    Error::new(magnus::exception::runtime_error(), e.to_string())
+    let ruby = unsafe { Ruby::get_unchecked() };
+    Error::new(ruby.exception_runtime_error(), e.to_string())
 }
 
-pub fn to_arg_error(e: impl std::fmt::Display) -> Error {
-    Error::new(magnus::exception::arg_error(), e.to_string())
+pub fn to_range_error(e: impl std::fmt::Display) -> Error {
+    let ruby = unsafe { Ruby::get_unchecked() };
+    Error::new(ruby.exception_range_error(), e.to_string())
+}
+
+pub fn to_type_error(e: impl std::fmt::Display) -> Error {
+    let ruby = unsafe { Ruby::get_unchecked() };
+    Error::new(ruby.exception_type_error(), e.to_string())
 }
 
 pub fn platform_error(e: slint_interpreter::PlatformError) -> Error {

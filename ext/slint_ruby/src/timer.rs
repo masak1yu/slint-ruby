@@ -2,8 +2,6 @@ use magnus::value::ReprValue;
 use magnus::{function, method, Error, Module, Object, RModule, Ruby, Value};
 use send_wrapper::SendWrapper;
 
-use crate::errors;
-
 // ---------------------------------------------------------------------------
 // Timer
 // ---------------------------------------------------------------------------
@@ -22,7 +20,7 @@ impl Timer {
 
     fn start_repeated(&self, interval_secs: f64, callable: Value) -> Result<(), Error> {
         let duration = std::time::Duration::from_secs_f64(interval_secs);
-        unsafe { magnus::gc::register_mark_object(callable) };
+        magnus::gc::register_mark_object(callable);
         let raw: usize = unsafe { std::mem::transmute(callable) };
 
         self.inner.start(
@@ -40,7 +38,7 @@ impl Timer {
 
     fn start_single_shot(&self, interval_secs: f64, callable: Value) -> Result<(), Error> {
         let duration = std::time::Duration::from_secs_f64(interval_secs);
-        unsafe { magnus::gc::register_mark_object(callable) };
+        magnus::gc::register_mark_object(callable);
         let raw: usize = unsafe { std::mem::transmute(callable) };
 
         self.inner.start(

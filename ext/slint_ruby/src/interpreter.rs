@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 use magnus::value::ReprValue;
-use magnus::{function, method, Error, IntoValue, Module, Object, RArray, RModule, Ruby, Value};
+use magnus::{function, method, Error, Module, Object, RArray, RModule, Ruby, Value};
 use send_wrapper::SendWrapper;
 use slint_interpreter::ComponentHandle;
 
@@ -308,7 +308,7 @@ impl ComponentInstance {
 
     fn set_callback(&self, name: String, callable: Value) -> Result<(), Error> {
         // GC-root the callable so it won't be collected while the closure lives
-        unsafe { magnus::gc::register_mark_object(callable) };
+        magnus::gc::register_mark_object(callable);
         let raw = value_to_raw(callable);
 
         self.inner
@@ -338,7 +338,7 @@ impl ComponentInstance {
         callback_name: String,
         callable: Value,
     ) -> Result<(), Error> {
-        unsafe { magnus::gc::register_mark_object(callable) };
+        magnus::gc::register_mark_object(callable);
         let raw = value_to_raw(callable);
 
         self.inner

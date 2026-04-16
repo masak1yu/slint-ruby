@@ -1,9 +1,9 @@
 use magnus::value::ReprValue;
-use magnus::{Error, IntoValue, Module, Object, RHash, Ruby, TryConvert, Value};
+use magnus::{Error, IntoValue, RHash, Ruby, TryConvert, Value};
 
 /// Convert a slint_interpreter::Value to a Ruby Value.
-/// Phase 2: supports Void, Number, String, Bool only.
-/// Other types fall back to nil with a warning.
+/// Supports Void, Number, String, Bool, Brush, Image, Struct.
+/// Unhandled variants fall back to nil with a warning.
 pub fn slint_to_ruby(ruby: &Ruby, val: &slint_interpreter::Value) -> Value {
     use slint_interpreter::Value as SV;
     match val {
@@ -38,7 +38,7 @@ pub fn slint_to_ruby(ruby: &Ruby, val: &slint_interpreter::Value) -> Value {
 }
 
 /// Convert a Ruby Value to a slint_interpreter::Value.
-/// Phase 2: supports nil, Float/Integer, String, Bool.
+/// Supports nil, Bool, Float/Integer, String, ListModel, Brush, Color, Image, Hash.
 pub fn ruby_to_slint(val: Value) -> Result<slint_interpreter::Value, Error> {
     let ruby = unsafe { Ruby::get_unchecked() };
     use slint_interpreter::Value as SV;
@@ -95,8 +95,7 @@ pub fn ruby_to_slint(val: Value) -> Result<slint_interpreter::Value, Error> {
         return Ok(SV::Struct(slint_interpreter::Struct::from_iter(fields)));
     }
 
-    Err(Error::new(
-        magnus::exception::type_error(),
+    Err(crate::errors::to_type_error(
         format!("Cannot convert Ruby value to Slint value: {:?}", val),
     ))
 }

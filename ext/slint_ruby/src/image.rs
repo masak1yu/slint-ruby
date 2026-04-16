@@ -1,5 +1,4 @@
-use magnus::value::ReprValue;
-use magnus::{function, method, Error, Module, Object, RModule, Ruby, Value};
+use magnus::{function, method, Error, Module, Object, RModule, Ruby};
 use send_wrapper::SendWrapper;
 
 use crate::errors;

@@ -1,4 +1,5 @@
 /target/
+/ext/slint_ruby/target/
 /tmp/
 /lib/slint/slint_ruby.bundle
 /pkg/
