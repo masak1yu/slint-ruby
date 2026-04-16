@@ -1,0 +1,23 @@
+[package]
+name = "slint-ruby"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "slint_ruby"
+crate-type = ["cdylib"]
+
+[dependencies]
+magnus = "0.8"
+slint-interpreter = { version = "1", features = [
+    "compat-1-2",
+    "backend-winit",
+    "renderer-femtovg",
+    "renderer-software",
+    "display-diagnostics",
+    "accessibility",
+] }
+spin_on = "0.1"
+send_wrapper = "0.6"
+i-slint-core = { version = "1", default-features = false }

@@ -1,0 +1,9 @@
+/target/
+/tmp/
+/lib/slint/slint_ruby.bundle
+/pkg/
+*.bundle
+*.so
+*.dylib
+*.o
+Gemfile.lock
