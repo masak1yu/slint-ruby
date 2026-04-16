@@ -21,7 +21,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxkbcommon-dev libwayland-dev libfontconfig-dev
+          sudo apt-get install -y libxkbcommon-dev libwayland-dev libfontconfig-dev xvfb
 
       - uses: oxidize-rb/actions/setup-ruby-and-rust@v1
         with:
@@ -32,5 +32,10 @@ jobs:
       - name: Compile native extension
         run: bundle exec rake compile
 
-      - name: Run tests
+      - name: Run tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run bundle exec rake test
+
+      - name: Run tests (macOS)
+        if: runner.os == 'macOS'
         run: bundle exec rake test
