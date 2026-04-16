@@ -21,7 +21,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxkbcommon-dev libwayland-dev libfontconfig-dev xvfb
+          sudo apt-get install -y libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev libfontconfig-dev xvfb libgl1-mesa-dev libx11-xcb-dev
 
       - uses: oxidize-rb/actions/setup-ruby-and-rust@v1
         with:
